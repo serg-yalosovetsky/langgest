@@ -1,0 +1,130 @@
+name: Release Windows Build
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v0.1.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build Windows executable
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip wheel setuptools
+          # Core project (no optional heavy ML deps — models are downloaded separately by user)
+          pip install -e ".[windows,ui]"
+          pip install pyinstaller==6.10.0
+
+      - name: Build executable with PyInstaller
+        shell: pwsh
+        run: |
+          pyinstaller voice_gesture_assistant.spec --noconfirm
+
+      - name: Verify executable exists
+        shell: pwsh
+        run: |
+          $exe = "dist\voice_gesture_assistant\voice_gesture_assistant.exe"
+          if (-not (Test-Path $exe)) {
+            Write-Error "Executable not found: $exe"
+            exit 1
+          }
+          Write-Output "Build OK: $exe"
+          & $exe --help 2>&1 | Write-Output
+
+      - name: Assemble release package
+        shell: pwsh
+        run: |
+          $pkg = "release_package"
+          New-Item -ItemType Directory -Path $pkg -Force | Out-Null
+
+          # Executable directory
+          Copy-Item -Recurse "dist\voice_gesture_assistant" "$pkg\voice_gesture_assistant"
+
+          # Config files (user-editable)
+          Copy-Item -Recurse "config" "$pkg\config"
+
+          # Empty model directories (user downloads models separately)
+          New-Item -ItemType Directory -Path "$pkg\models\ru" -Force | Out-Null
+          New-Item -ItemType Directory -Path "$pkg\models\en" -Force | Out-Null
+
+          # Runtime data directory
+          New-Item -ItemType Directory -Path "$pkg\data" -Force | Out-Null
+
+          # Docs and readme
+          Copy-Item "README.md" "$pkg\"
+          Copy-Item -Recurse "docs" "$pkg\docs"
+
+          # Convenience launcher batch script
+          @"
+          @echo off
+          cd /d "%~dp0"
+          voice_gesture_assistant\voice_gesture_assistant.exe %*
+          pause
+          "@ | Set-Content "$pkg\run.bat" -Encoding UTF8
+
+          Write-Output "Package contents:"
+          Get-ChildItem -Recurse $pkg | Select-Object FullName
+
+      - name: Create ZIP archive
+        shell: pwsh
+        run: |
+          $tag = if ("${{ github.ref_name }}" -ne "") { "${{ github.ref_name }}" } else { "${{ inputs.tag }}" }
+          $zipName = "voice-gesture-assistant-$tag-windows-x64.zip"
+          Compress-Archive -Path "release_package\*" -DestinationPath $zipName -Force
+          Write-Output "ZIP_NAME=$zipName" >> $env:GITHUB_ENV
+          Write-Output "Created: $zipName ($('{0:N2}' -f ((Get-Item $zipName).Length / 1MB)) MB)"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: ${{ env.ZIP_NAME }}
+          retention-days: 30
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ env.ZIP_NAME }}
+          generate_release_notes: true
+          body: |
+            ## Voice & Gesture Desktop Assistant ${{ github.ref_name }}
+
+            ### Installation
+
+            1. Download `voice-gesture-assistant-${{ github.ref_name }}-windows-x64.zip` and extract it.
+            2. Download ASR models:
+               - **RU**: Place sherpa-onnx transducer files (`encoder.onnx`, `decoder.onnx`, `joiner.onnx`, `tokens.txt`) into `models/ru/`
+               - **EN**: faster-whisper `base.en` downloads automatically on first run.
+            3. Optionally install gesture dependencies: `pip install mediapipe opencv-python`
+            4. Edit `config/app.yaml` to configure your preferences.
+            5. Run `run.bat` (or `voice_gesture_assistant\voice_gesture_assistant.exe`).
+
+            ### Requirements
+            - Windows 10 / 11 (x64)
+            - 720p+ webcam for gesture control (optional)
+            - Microphone
+
+            ### Changelog
