@@ -1,0 +1,32 @@
+cases:
+  - gesture: open_palm
+    expected_intent: media.play_pause
+    min_confidence: 0.75
+
+  - gesture: fist
+    expected_intent: action.cancel
+    min_confidence: 0.75
+
+  - gesture: swipe_left
+    expected_intent: media.previous
+    min_confidence: 0.75
+
+  - gesture: swipe_right
+    expected_intent: media.next
+    min_confidence: 0.75
+
+  - gesture: hand_up
+    expected_intent: volume.up
+    min_confidence: 0.75
+
+  - gesture: hand_down
+    expected_intent: volume.down
+    min_confidence: 0.75
+
+  - gesture: pinch
+    expected_intent: action.click
+    min_confidence: 0.75
+
+  - gesture: two_fingers
+    expected_intent: action.scroll_mode
+    min_confidence: 0.75

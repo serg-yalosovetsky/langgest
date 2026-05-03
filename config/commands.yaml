@@ -1,0 +1,478 @@
+commands:
+  # --- Media ---
+  - id: media.play_pause
+    risk: safe
+    patterns:
+      ru:
+        - "пауза"
+        - "продолжить"
+        - "стоп музыка"
+        - "поставь на паузу"
+        - "возобнови"
+      en:
+        - "pause"
+        - "play"
+        - "stop music"
+        - "resume"
+    action:
+      type: hotkey
+      keys: ["playpause"]
+
+  - id: media.next
+    risk: safe
+    patterns:
+      ru:
+        - "следующий трек"
+        - "следующая песня"
+        - "дальше"
+        - "следующий"
+      en:
+        - "next track"
+        - "next song"
+        - "next"
+    action:
+      type: hotkey
+      keys: ["nexttrack"]
+
+  - id: media.previous
+    risk: safe
+    patterns:
+      ru:
+        - "предыдущий трек"
+        - "предыдущая песня"
+        - "назад трек"
+        - "предыдущий"
+      en:
+        - "previous track"
+        - "previous song"
+        - "previous"
+    action:
+      type: hotkey
+      keys: ["prevtrack"]
+
+  # --- Volume ---
+  - id: volume.up
+    risk: safe
+    patterns:
+      ru:
+        - "громче"
+        - "увеличь громкость"
+        - "сделай громче"
+        - "погромче"
+      en:
+        - "louder"
+        - "volume up"
+        - "increase volume"
+    action:
+      type: volume
+      delta: 5
+
+  - id: volume.down
+    risk: safe
+    patterns:
+      ru:
+        - "тише"
+        - "уменьши громкость"
+        - "сделай тише"
+        - "потише"
+      en:
+        - "quieter"
+        - "volume down"
+        - "decrease volume"
+    action:
+      type: volume
+      delta: -5
+
+  - id: volume.mute
+    risk: safe
+    patterns:
+      ru:
+        - "выключи звук"
+        - "без звука"
+        - "заглуши"
+        - "мут"
+      en:
+        - "mute"
+        - "silence"
+        - "no sound"
+    action:
+      type: volume
+      mute: true
+
+  - id: volume.unmute
+    risk: safe
+    patterns:
+      ru:
+        - "включи звук"
+        - "отмени мут"
+        - "размути"
+      en:
+        - "unmute"
+        - "restore sound"
+    action:
+      type: volume
+      mute: false
+
+  - id: volume.set
+    risk: safe
+    patterns:
+      ru:
+        - "звук {level}"
+        - "громкость {level}"
+        - "установи громкость {level}"
+      en:
+        - "volume {level}"
+        - "set volume {level}"
+    slots:
+      level:
+        type: integer
+        range: [0, 100]
+    action:
+      type: volume
+      set_level: "{level}"
+
+  # --- Browser ---
+  - id: browser.open
+    risk: safe
+    patterns:
+      ru:
+        - "открой браузер"
+        - "запусти браузер"
+        - "запусти хром"
+        - "хром"
+        - "браузер"
+      en:
+        - "open browser"
+        - "start browser"
+        - "open chrome"
+        - "chrome"
+    action:
+      type: open_app
+      app: "chrome"
+
+  - id: browser.open_tab
+    risk: safe
+    patterns:
+      ru:
+        - "новая вкладка"
+        - "открой вкладку"
+        - "открой новую вкладку"
+      en:
+        - "new tab"
+        - "open tab"
+        - "open new tab"
+    action:
+      type: hotkey
+      keys: ["ctrl", "t"]
+
+  - id: browser.close_tab
+    risk: medium
+    patterns:
+      ru:
+        - "закрой вкладку"
+        - "закрыть вкладку"
+      en:
+        - "close tab"
+    action:
+      type: hotkey
+      keys: ["ctrl", "w"]
+
+  - id: browser.next_tab
+    risk: safe
+    patterns:
+      ru:
+        - "следующая вкладка"
+        - "следующий таб"
+      en:
+        - "next tab"
+    action:
+      type: hotkey
+      keys: ["ctrl", "tab"]
+
+  - id: browser.previous_tab
+    risk: safe
+    patterns:
+      ru:
+        - "предыдущая вкладка"
+        - "предыдущий таб"
+      en:
+        - "previous tab"
+    action:
+      type: hotkey
+      keys: ["ctrl", "shift", "tab"]
+
+  - id: browser.back
+    risk: safe
+    patterns:
+      ru:
+        - "назад"
+        - "вернись назад"
+      en:
+        - "back"
+        - "go back"
+    action:
+      type: hotkey
+      keys: ["alt", "left"]
+
+  - id: browser.forward
+    risk: safe
+    patterns:
+      ru:
+        - "вперёд"
+        - "вперед"
+      en:
+        - "forward"
+        - "go forward"
+    action:
+      type: hotkey
+      keys: ["alt", "right"]
+
+  - id: browser.refresh
+    risk: safe
+    patterns:
+      ru:
+        - "обнови"
+        - "обновить страницу"
+        - "перезагрузи страницу"
+      en:
+        - "refresh"
+        - "reload"
+        - "reload page"
+    action:
+      type: hotkey
+      keys: ["ctrl", "r"]
+
+  - id: browser.search
+    risk: safe
+    patterns:
+      ru:
+        - "найди {query}"
+        - "поищи {query}"
+        - "ищи {query}"
+      en:
+        - "search {query}"
+        - "find {query}"
+        - "look up {query}"
+    slots:
+      query:
+        type: string
+    action:
+      type: browser_search
+      query: "{query}"
+
+  # --- Window management ---
+  - id: window.next
+    risk: safe
+    patterns:
+      ru:
+        - "следующее окно"
+        - "переключи окно"
+        - "другое окно"
+      en:
+        - "next window"
+        - "switch window"
+    action:
+      type: hotkey
+      keys: ["alt", "tab"]
+
+  - id: window.previous
+    risk: safe
+    patterns:
+      ru:
+        - "предыдущее окно"
+      en:
+        - "previous window"
+    action:
+      type: hotkey
+      keys: ["alt", "shift", "tab"]
+
+  - id: window.show_all
+    risk: safe
+    patterns:
+      ru:
+        - "покажи окна"
+        - "все окна"
+        - "обзор окон"
+      en:
+        - "show windows"
+        - "all windows"
+    action:
+      type: hotkey
+      keys: ["win", "tab"]
+
+  - id: window.go_to_browser
+    risk: safe
+    patterns:
+      ru:
+        - "перейди в браузер"
+        - "открой браузер в окне"
+      en:
+        - "go to browser"
+        - "switch to browser"
+    action:
+      type: activate_window
+      process: ["chrome.exe", "msedge.exe", "firefox.exe"]
+
+  - id: window.go_to_terminal
+    risk: safe
+    patterns:
+      ru:
+        - "перейди в терминал"
+        - "открой терминал"
+      en:
+        - "go to terminal"
+        - "switch to terminal"
+    action:
+      type: activate_window
+      process: ["WindowsTerminal.exe", "cmd.exe", "powershell.exe", "wt.exe"]
+
+  - id: window.go_to_editor
+    risk: safe
+    patterns:
+      ru:
+        - "перейди в редактор"
+        - "открой редактор"
+      en:
+        - "go to editor"
+        - "switch to editor"
+    action:
+      type: activate_window
+      process: ["Code.exe", "idea64.exe", "pycharm64.exe", "notepad++.exe"]
+
+  # --- Clipboard ---
+  - id: clipboard.copy
+    risk: medium
+    patterns:
+      ru:
+        - "скопируй"
+        - "копировать"
+      en:
+        - "copy"
+    action:
+      type: hotkey
+      keys: ["ctrl", "c"]
+
+  - id: clipboard.cut
+    risk: medium
+    patterns:
+      ru:
+        - "вырежи"
+        - "вырезать"
+      en:
+        - "cut"
+    action:
+      type: hotkey
+      keys: ["ctrl", "x"]
+
+  - id: clipboard.paste
+    risk: medium
+    patterns:
+      ru:
+        - "вставь"
+        - "вставить"
+      en:
+        - "paste"
+    action:
+      type: hotkey
+      keys: ["ctrl", "v"]
+
+  - id: clipboard.clear
+    risk: medium
+    patterns:
+      ru:
+        - "очисти буфер"
+        - "очистить буфер обмена"
+      en:
+        - "clear clipboard"
+        - "empty clipboard"
+    action:
+      type: clipboard_clear
+
+  - id: clipboard.read
+    risk: safe
+    patterns:
+      ru:
+        - "прочитай буфер"
+        - "что в буфере"
+        - "покажи буфер"
+      en:
+        - "read clipboard"
+        - "show clipboard"
+    action:
+      type: clipboard_read
+
+  # --- Shell ---
+  - id: shell.clear
+    risk: safe
+    patterns:
+      ru:
+        - "очисти терминал"
+        - "очистить экран"
+      en:
+        - "clear terminal"
+        - "clear screen"
+    action:
+      type: shell_insert
+      command: "cls"
+
+  - id: shell.stop_process
+    risk: safe
+    patterns:
+      ru:
+        - "останови процесс"
+        - "прервать процесс"
+        - "ctrl c"
+      en:
+        - "stop process"
+        - "interrupt"
+        - "ctrl c"
+    action:
+      type: hotkey
+      keys: ["ctrl", "c"]
+
+  - id: shell.last_command
+    risk: safe
+    patterns:
+      ru:
+        - "последняя команда"
+        - "предыдущая команда"
+      en:
+        - "last command"
+        - "previous command"
+    action:
+      type: keypress
+      key: "up"
+
+  - id: shell.insert
+    risk: medium
+    patterns:
+      ru:
+        - "вставь команду {command}"
+        - "введи команду {command}"
+      en:
+        - "insert command {command}"
+        - "type command {command}"
+    slots:
+      command:
+        type: string
+    action:
+      type: shell_insert
+      command: "{command}"
+
+  - id: shell.execute
+    risk: dangerous
+    patterns:
+      ru:
+        - "выполни команду {command}"
+        - "запусти команду {command}"
+        - "выполни {command}"
+      en:
+        - "execute command {command}"
+        - "run command {command}"
+        - "execute {command}"
+    slots:
+      command:
+        type: string
+    action:
+      type: shell_execute
+      command: "{command}"

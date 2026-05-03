@@ -1,0 +1,53 @@
+app:
+  language_default: "ru"
+  startup_enabled: false
+  debug_mode: true
+
+audio:
+  sample_rate: 16000
+  channels: 1
+  vad_enabled: true
+  vad_threshold: 0.6
+  wake_words_ru:
+    - "компьютер"
+    - "ассистент"
+  wake_words_en:
+    - "computer"
+    - "assistant"
+
+asr:
+  ru:
+    engine: "sherpa-onnx"
+    model_path: "models/ru"
+  en:
+    engine: "faster-whisper"
+    model: "base.en"
+
+camera:
+  device_index: 0
+  width: 1280
+  height: 720
+  fps: 30
+  enabled: true
+
+gestures:
+  enabled: true
+  confidence_threshold: 0.75
+  min_stable_frames: 5
+  cooldown_ms: 700
+  safe_gestures_without_voice:
+    - media.play_pause
+    - media.next
+    - media.previous
+    - volume.up
+    - volume.down
+
+security:
+  dangerous_commands_require_confirmation: true
+  log_clipboard_content: false
+  log_audio: false
+  log_video: false
+
+storage:
+  db_path: "data/assistant.db"
+  log_path: "data/events.jsonl"

@@ -1,0 +1,50 @@
+dictionary:
+  aliases:
+    browser.open:
+      ru:
+        - "открой браузер"
+        - "запусти хром"
+        - "хром"
+        - "браузер"
+      en:
+        - "open browser"
+        - "start chrome"
+        - "chrome"
+
+    media.next:
+      ru:
+        - "дальше"
+        - "следующая"
+        - "следующий трек"
+        - "следующая песня"
+      en:
+        - "next"
+        - "next track"
+        - "next song"
+
+    media.previous:
+      ru:
+        - "назад трек"
+        - "предыдущая"
+        - "предыдущий трек"
+      en:
+        - "previous"
+        - "prev"
+        - "previous track"
+
+    volume.up:
+      ru:
+        - "громче"
+        - "увеличь громкость"
+        - "сделай громче"
+      en:
+        - "louder"
+        - "volume up"
+
+    volume.down:
+      ru:
+        - "тише"
+        - "уменьши громкость"
+      en:
+        - "quieter"
+        - "volume down"

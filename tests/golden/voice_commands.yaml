@@ -1,0 +1,70 @@
+cases:
+  - text: "громче"
+    language: ru
+    expected_intent: volume.up
+    min_confidence: 0.7
+
+  - text: "тише"
+    language: ru
+    expected_intent: volume.down
+    min_confidence: 0.7
+
+  - text: "пауза"
+    language: ru
+    expected_intent: media.play_pause
+    min_confidence: 0.9
+
+  - text: "поставь на паузу"
+    language: ru
+    expected_intent: media.play_pause
+    min_confidence: 0.7
+
+  - text: "следующий трек"
+    language: ru
+    expected_intent: media.next
+    min_confidence: 0.9
+
+  - text: "предыдущий трек"
+    language: ru
+    expected_intent: media.previous
+    min_confidence: 0.9
+
+  - text: "новая вкладка"
+    language: ru
+    expected_intent: browser.open_tab
+    min_confidence: 0.9
+
+  - text: "закрой вкладку"
+    language: ru
+    expected_intent: browser.close_tab
+    min_confidence: 0.9
+
+  - text: "следующее окно"
+    language: ru
+    expected_intent: window.next
+    min_confidence: 0.9
+
+  - text: "volume up"
+    language: en
+    expected_intent: volume.up
+    min_confidence: 0.7
+
+  - text: "pause"
+    language: en
+    expected_intent: media.play_pause
+    min_confidence: 0.9
+
+  - text: "next track"
+    language: en
+    expected_intent: media.next
+    min_confidence: 0.9
+
+  - text: "new tab"
+    language: en
+    expected_intent: browser.open_tab
+    min_confidence: 0.9
+
+  - text: "close tab"
+    language: en
+    expected_intent: browser.close_tab
+    min_confidence: 0.9

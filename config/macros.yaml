@@ -1,0 +1,47 @@
+macros:
+  - id: work.start
+    name: "Начать работу"
+    phrases_ru:
+      - "начать работу"
+      - "рабочий режим"
+      - "начни работу"
+    phrases_en:
+      - "start work"
+      - "work mode"
+    steps:
+      - action: open_app
+        app: "chrome"
+      - action: open_url
+        url: "https://calendar.google.com"
+      - action: open_app
+        app: "WindowsTerminal"
+      - action: hotkey
+        keys: ["win", "left"]
+
+  - id: music.start
+    name: "Включить музыку"
+    phrases_ru:
+      - "включи музыку"
+      - "музыкальный режим"
+    phrases_en:
+      - "start music"
+      - "music mode"
+    steps:
+      - action: open_app
+        app: "Spotify"
+      - action: sleep
+        duration: 1.5
+      - action: hotkey
+        keys: ["playpause"]
+
+  - id: screenshot.clipboard
+    name: "Скриншот в буфер"
+    phrases_ru:
+      - "сделай скриншот"
+      - "скриншот"
+    phrases_en:
+      - "take screenshot"
+      - "screenshot"
+    steps:
+      - action: hotkey
+        keys: ["win", "shift", "s"]
